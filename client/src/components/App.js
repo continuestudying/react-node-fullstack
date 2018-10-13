@@ -3,11 +3,10 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import axios from 'axios';
 
 import Header from './Header/Header';
+import DashBoard from './Dashboard/Dashboard';
+import SurveyNew from './SurveyNew/SurveyNew';
+import Landing from './Landing/Landing';
 
-
-const DashBoard = () => <h1>DashBoard</h1>;
-const SurveyNew = () => <h1>Survey New</h1>;
-const Landing = () => <h1>Landing</h1>;
 
 class App extends Component {
   
