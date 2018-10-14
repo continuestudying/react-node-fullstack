@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
-import axios from 'axios';
+import { connect } from 'react-redux';
 
 import Header from './Header/Header';
 import DashBoard from './Dashboard/Dashboard';
 import SurveyNew from './SurveyNew/SurveyNew';
 import Landing from './Landing/Landing';
-
+import * as actions from '../actions';
 
 class App extends Component {
+  
+  componentDidMount() {
+    this.props.fetchUser();
+  }
   
   render() {
     return (
@@ -26,4 +30,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect(null, actions)(App);
