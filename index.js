@@ -1,3 +1,4 @@
+// server/index.js
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
@@ -21,6 +22,8 @@ app.use(passport.session());
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
 
 require('./models/User');
+require('./models/Survey');
+
 require('./services/passport');
 require('./routes/authRoutes')(app);
 require('./routes/billingRoutes')(app);
