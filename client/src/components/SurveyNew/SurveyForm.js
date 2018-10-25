@@ -9,7 +9,7 @@ const FIELDS = [
     { type: 'text', label: 'Survey Title', name: 'title' },
     { type: 'text', label: 'Subject Lint', name: 'subject' },
     { type: 'text', label: 'Email Body', name: 'email' },
-    { type: 'text', label: 'Recipient List', name: 'recipient' }
+    { type: 'text', label: 'Recipient List', name: 'recipients' }
 ];
 
 class SurveyForm extends Component {
@@ -36,6 +36,26 @@ class SurveyForm extends Component {
     };    
 }
 
+const validate = (values) => {
+    const error = {};
+    // All fields are required
+    _.map(FIELDS, ({ name }) => {
+        error[name] = `Field ${name} is required`;
+    });
+
+    // Validate List of emails
+    const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const invalidEmails = _.split(values.recipients, ',')
+                            .filter(recipient => {
+                                return !EMAIL_REGEX.test(recipient.trim());
+                            })
+                            .join(', ');    
+    _.size(invalidEmails) && (error.recipients = `These emails are invalid : ${invalidEmails}`);
+    
+    return error;    
+}
+
 export default reduxForm({
+    validate,
     form: 'surveyForm'
 })(SurveyForm);
