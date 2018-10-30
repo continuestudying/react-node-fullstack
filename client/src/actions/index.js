@@ -1,17 +1,7 @@
 import axios from 'axios';
 
-import { FETCH_USER } from './types';
+import { FETCH_USER, HANDLE_SUBMIT } from './types';
 
-/**
- * Get Current User
- */
-// export const fetchUser = () => {
-//     return (dispatch) => {
-//         axios
-//             .get('api/current-user')
-//             .then(res => dispatch({type: FETCH_USER, payload: res}));
-//     }
-// }
 
 /**
  * Get Current User
@@ -26,8 +16,18 @@ export const fetchUser = () => async dispatch => {
  */
 export const handleToken = (token) => {
     return (dispatch) => {
-        axios.post('api/stripe', token).then((res) => {
+        axios.post('/api/stripe', token).then((res) => {
             dispatch({type: FETCH_USER, payload: res.data});
+        });
+    }
+}
+
+export const handleSubmit = (survey) => {
+    
+    return (dispatch) =>  {
+        console.log('values sent to server: ', survey);
+        axios.post('/api/surveys', { ...survey }).then(res => {
+            dispatch({type: HANDLE_SUBMIT, payload: res.data});
         });
     }
 }

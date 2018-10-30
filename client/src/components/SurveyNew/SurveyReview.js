@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import * as actions from '../../actions/index';
 
 import { FIELD_LIST } from './fieldList';
 
@@ -12,7 +13,7 @@ class SurveyReview extends Component {
             return (
                 <div key={name}>
                     <label>{ label }</label>
-                    <div>{ this.props[name] }</div>
+                    <div>{ this.props.values[name] }</div>
                 </div>
             );
         });
@@ -22,10 +23,10 @@ class SurveyReview extends Component {
         return (
             <div>
                 { this.renderContent() }
-                <button className="btn-flat yellow darken-3 white-text">
+                <button className="btn-flat yellow darken-3 white-text" onClick={this.props.cancel}>
                     Cancel
                 </button>
-                <button className="btn-flat right teal white-text">
+                <button className="btn-flat right teal white-tex" onClick={() => this.props.handleSubmit(this.props.values)}>
                     Submit
                     <i className="material-icons right">email</i>
                 </button>
@@ -35,7 +36,9 @@ class SurveyReview extends Component {
 }
 
 const mapStateToProps = (state) => {
-    return { ...state.form.surveyForm.values };
+    return {
+        values: state.form.surveyForm.values 
+    };
 }
 
-export default connect(mapStateToProps, null)(SurveyReview);
+export default connect(mapStateToProps, actions)(SurveyReview);
