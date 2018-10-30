@@ -21,12 +21,18 @@ app.use(passport.session());
 
 mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
 
+// Models
 require('./models/User');
 require('./models/Survey');
 
+// Authorize
 require('./services/passport');
+
+// Routes
 require('./routes/authRoutes')(app);
 require('./routes/billingRoutes')(app);
+require('./routes/surveyRoutes')(app);
+
 
 if (process.env.NODE_ENV === 'production'){
     // Express will serve up production assets
