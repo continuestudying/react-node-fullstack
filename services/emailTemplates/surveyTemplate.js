@@ -1,3 +1,6 @@
+// services/emailTemplate/surveyTemplate.js
+
+const keys = require('../../config/keys');
 module.exports = survey => {
     return `
         <html>
@@ -7,11 +10,9 @@ module.exports = survey => {
                     <p>Please answer the following question: </p>
                     <p>${survey.body}</p>
                     <div>
-                        <a>Yes</a>
-                    </div>
-                    <div>
-                        <a>No</a>
-                    </div>
+                        <a href="${keys.redirectDomain}/api/surveys">Yes</a> | 
+                        <a href="${keys.redirectDomain}/api/surveys">No</a>
+                    </div>                    
                 </div>
             </body>
         </html>

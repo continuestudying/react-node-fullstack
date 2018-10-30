@@ -22,11 +22,12 @@ export const handleToken = (token) => {
     }
 }
 
-export const handleSubmit = (survey) => {
+export const handleSubmit = (survey, history) => {
     
     return (dispatch) =>  {
         console.log('values sent to server: ', survey);
         axios.post('/api/surveys', { ...survey }).then(res => {
+            history.push('/surveys');
             dispatch({type: HANDLE_SUBMIT, payload: res.data});
         });
     }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 class Dashboard extends Component {
-    render() {
+    renderContent() {        
         return (
             <div>
                 <h1>Dashboard</h1>
@@ -11,7 +11,12 @@ class Dashboard extends Component {
                         <i className="large material-icons">add</i>
                     </Link>                
                 </div>
-            </div>           
+            </div>
+        );        
+    }
+    render() {
+        return (
+            <div> {this.renderContent()} </div>           
         );
     };
 }

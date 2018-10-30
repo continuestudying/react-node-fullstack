@@ -1,14 +1,15 @@
 import _ from 'lodash';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../../actions/index';
+import { withRouter } from 'react-router-dom';
+
+import * as actions from '../../actions';
 
 import { FIELD_LIST } from './fieldList';
 
 class SurveyReview extends Component {    
     
-    renderContent() {
-        console.log('Inside Survey : ', this.props);
+    renderContent() {        
         return _.map(FIELD_LIST, ({label, name}) => {
             return (
                 <div key={name}>
@@ -26,7 +27,7 @@ class SurveyReview extends Component {
                 <button className="btn-flat yellow darken-3 white-text" onClick={this.props.cancel}>
                     Cancel
                 </button>
-                <button className="btn-flat right teal white-tex" onClick={() => this.props.handleSubmit(this.props.values)}>
+                <button className="btn-flat right teal white-tex" onClick={() => this.props.handleSubmit(this.props.values, this.props.history)}>
                     Submit
                     <i className="material-icons right">email</i>
                 </button>
@@ -37,8 +38,8 @@ class SurveyReview extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        values: state.form.surveyForm.values 
+        values: state.form.surveyForm.values
     };
 }
 
-export default connect(mapStateToProps, actions)(SurveyReview);
+export default connect(mapStateToProps, actions)(withRouter(SurveyReview));
