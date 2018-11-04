@@ -74,7 +74,7 @@ class Mailer {
         sendgrid.setApiKey(keys.sendGridKey);
         this.requestObject = {
             subject: subject,
-            from: 'continuestudying@gmail.com',
+            from: 'continues@gmail.com',
             to: recipients,
             html: content
         }

@@ -1,5 +1,7 @@
 // routes/surveyRoutes.js
 const _ = require('lodash');
+const Path = require('path-parser').default;
+const { URL } = require('url'); 
 const mongoose = require('mongoose');
 
 const requireLogin = require('../middlewares/requireLogin');
@@ -15,26 +17,47 @@ module.exports = app => {
         return res.send("Thanks for your vote !!!");
     });
 
+    app.post('/api/surveys/webhooks', (req, res) => {
+        const p = new Path('/api/surveys/:surveyId/:choice');
+
+        _(req.body)
+                .map(({email, url}) => {
+                    const pathname = new URL(url).pathname;        
+                    const match = p.test(pathname);
+                    return match ? { email, surveyId: match.surveyId, choice: match.choice } : null;
+                })
+                .compact()
+                .uniqBy('email', 'surveyId')
+                .each(({ surveyId, email, choice }) => {
+                    Survey.updateOne(
+                        {
+                            _id: surveyId,
+                            recipients: {
+                                $elemMatch: { email: email, responded: false }
+                            }                                       
+                        }, 
+                        {
+                            $inc: { [choice]: 1 },
+                            $set: { 'recipients.$.responded': true }
+                        }
+                    ).exec();
+                });
+            
+        res.send({});
+    });
+
     app.post('/api/surveys', requireLogin, requireCredits, async (req, res) => {
         
         const { title, subject, body, recipients } = req.body;
-        
-        // const survey = new Survey({
-        //     title,
-        //     subject,
-        //     body,
-        //     recipients: _(recipients)
-        //                     .split(',')
-        //                     .map(email => ({ email: email.trim() }))
-        //                     .value(),
-        //     _user: req.user.id,
-        //     dateSent: Date.now()
-        // });
+               
         const survey = new Survey({
             title,
             subject,
             body,
-            recipients: recipients,
+            recipients: _(recipients)
+                                .split(',')
+                                .map(email => ({ email: email.trim() }))
+                                .value(),
             _user: req.user.id,
             dateSent: Date.now()
         });
@@ -53,3 +76,15 @@ module.exports = app => {
         
     });    
 }
+
+// const survey = new Survey({
+//     title,
+//     subject,
+//     body,
+//     recipients: _(recipients)
+//                     .split(',')
+//                     .map(email => ({ email: email.trim() }))
+//                     .value(),
+//     _user: req.user.id,
+//     dateSent: Date.now()
+// });
