@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { FETCH_USER, HANDLE_SUBMIT } from './types';
+import { FETCH_USER, HANDLE_SUBMIT, FETCH_SURVEYS } from './types';
 
 
 /**
@@ -28,6 +28,14 @@ export const handleSubmit = (survey, history) => {
         axios.post('/api/surveys', { ...survey }).then(res => {
             history.push('/surveys');
             dispatch({type: HANDLE_SUBMIT, payload: res.data});
+        });
+    }
+}
+
+export const fetchSurveys = () => {
+    return (dispatch) => {
+        axios.get('/api/surveys').then(res => {
+            dispatch({ type: FETCH_SURVEYS, payload: res.data });
         });
     }
 }
